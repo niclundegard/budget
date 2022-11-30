@@ -1,0 +1,27 @@
+name: prod-deploy
+
+on:
+  push:
+    branches: [ main]
+  
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v1
+
+    - name: Build
+      run: dotnet build db/budget/budget.sqlproj /p:NetCoreBuild=true
+    
+    - uses: azure/sql-action@v2
+      with:        
+        connection-string: ${{ secrets.DB_PROD_CONNECTION_STRING }}
+        path: 'db/budget/bin/Debug/budget.dacpac'
+        action: 'publish'
+        arguments: '/p:DropObjectsNotInSource=true'
