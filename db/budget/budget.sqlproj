@@ -10,4 +10,10 @@
   <Target Name="BeforeBuild">
     <Delete Files="$(BaseIntermediateOutputPath)\project.assets.json" />
   </Target>
+  <ItemGroup>
+    <Folder Include="Scripts\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Scripts\PostDeploy.sql" />
+  </ItemGroup>
 </Project>
